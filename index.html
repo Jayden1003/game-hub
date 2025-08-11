@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mini Game Hub | 小游戏合集（首版）</title>
+  <meta name="description" content="超轻量小游戏合集网站，一键上线示例。" />
+  <style>
+    :root{--bg:#0b1020;--card:#111731;--muted:#8a93ad;--text:#e9ecf1;--accent:#5ee0a3;--border:#1c2342}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:linear-gradient(180deg,#0b1020,#111737);color:var(--text)}
+    .wrap{max-width:1000px;margin:0 auto;padding:24px}
+    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .title{font-size:22px;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;gap:10px}
+    .badge{font-size:12px;color:#0b1020;background:var(--accent);padding:2px 8px;border-radius:999px}
+    .desc{color:var(--muted);font-size:14px;margin:4px 0 0}
+
+    .toolbar{display:flex;gap:10px;align-items:center;margin:16px 0}
+    input[type="search"]{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;outline:none}
+    .deploy{background:transparent;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer}
+    .deploy:hover{border-color:#33406d}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:transform .15s ease, box-shadow .15s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .thumb{height:140px;border-radius:12px;background:linear-gradient(135deg,#1d2447,#131b3b);border:1px dashed #2a335f;display:grid;place-items:center;color:var(--muted);font-size:13px}
+    .meta{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px}
+    .btn{background:var(--accent);color:#0b1020;border:none;padding:10px 12px;border-radius:12px;font-weight:700;cursor:pointer}
+    .btn.secondary{background:#263054;color:var(--text)}
+
+    /* Modal */
+    .modal{position:fixed;inset:0;background:rgba(3,6,20,.65);display:none;align-items:center;justify-content:center;padding:20px}
+    .modal.open{display:flex}
+    .panel{width:min(720px,100%);background:#0e1533;border:1px solid var(--border);border-radius:18px;overflow:hidden}
+    .panel header{padding:14px 16px;border-bottom:1px solid var(--border);gap:8px}
+    .panel header h3{margin:0;font-size:16px}
+    .panel .body{padding:16px}
+
+    /* Reaction Timer Game */
+    .rt-wrap{display:grid;gap:14px}
+    .rt-stage{height:280px;border-radius:12px;border:1px dashed #33406d;display:grid;place-items:center;background:#0b132b}
+    .rt-hint{color:var(--muted);font-size:13px}
+    .rt-big{font-size:42px;font-weight:800}
+
+    footer{margin:30px 0 10px;color:var(--muted);font-size:12px;text-align:center}
+    a{color:var(--accent);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="title">🎮 Mini Game Hub <span class="badge">v0.1</span></div>
+        <p class="desc">首个可上线模板：自带 1 款小游戏，可扩展合集列表。</p>
+      </div>
+      <button class="deploy" id="copyBtn" title="复制整页代码">复制代码</button>
+    </header>
+
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="搜索游戏，例如：反应、点击…" />
+      <button class="deploy" id="how">使用说明</button>
+    </div>
+
+    <section class="grid" id="grid">
+      <!-- Card: Reaction Timer -->
+      <article class="card" data-title="反应速度测试">
+        <div class="thumb">反应速度测试（内置）</div>
+        <div class="meta"><span>难度：⭐</span><span>类型：反应</span></div>
+        <button class="btn" data-open="rt">开始游戏</button>
+      </article>
+
+      <!-- Card: 占位 -->
+      <article class="card" data-title="点击挑战（即将上线）">
+        <div class="thumb">点击挑战（Coming soon）</div>
+        <div class="meta"><span>难度：⭐</span><span>类型：点击</span></div>
+        <button class="btn secondary" disabled>即将上线</button>
+      </article>
+
+      <article class="card" data-title="躲避方块（即将上线）">
+        <div class="thumb">躲避方块（Coming soon）</div>
+        <div class="meta"><span>难度：⭐⭐</span><span>类型：躲避</span></div>
+        <button class="btn secondary" disabled>即将上线</button>
+      </article>
+    </section>
+
+    <footer>© 2025 Mini Game Hub. 免费模板，随意使用与修改。由 <a href="#" id="openHelp">使用指南</a> 提供支持。</footer>
+  </div>
+
+  <!-- 使用说明 Modal -->
+  <div class="modal" id="helpModal" aria-hidden="true">
+    <div class="panel">
+      <header>
+        <h3>🚀 使用说明（5 分钟上线）</h3>
+        <button class="deploy" id="closeHelp">关闭</button>
+      </header>
+      <div class="body">
+        <ol>
+          <li>复制本页全部代码（右上角“复制代码”）。</li>
+          <li>去 <strong>GitHub</strong> 新建仓库，例如 <code>game-hub</code>，新建文件 <code>index.html</code>，粘贴保存。</li>
+          <li>用 <strong>Vercel</strong> 绑定 GitHub，一键导入该仓库并部署，立刻获得国外可访问的网址。</li>
+          <li>以后你只要继续在 <code>index.html</code> 里添加新游戏模块，就能扩充你的合集。</li>
+        </ol>
+        <p class="desc">如果你不熟悉 GitHub / Vercel，回到聊天让我带你手把手做。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reaction Timer Modal -->
+  <div class="modal" id="rtModal" aria-hidden="true">
+    <div class="panel">
+      <header>
+        <h3>⚡ 反应速度测试</h3>
+        <button class="deploy" id="rtClose">退出</button>
+      </header>
+      <div class="body">
+        <div class="rt-wrap">
+          <div class="rt-stage" id="rtStage">
+            <div class="rt-hint" id="rtHint">点击下方按钮开始，等待屏幕提示“点我！”再尽快点击。</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <button class="btn" id="rtStart">开始</button>
+            <button class="deploy" id="rtRetry" disabled>再来一次</button>
+            <span class="rt-hint" id="rtResult">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- small helpers ---
+    const $ = s => document.querySelector(s);
+    const $$ = s => Array.from(document.querySelectorAll(s));
+
+    // search filter
+    const search = $('#search');
+    search.addEventListener('input', () => {
+      const kw = search.value.trim().toLowerCase();
+      $$('#grid .card').forEach(c=>{
+        const t = (c.getAttribute('data-title')||'').toLowerCase();
+        c.style.display = t.includes(kw) ? '' : 'none';
+      });
+    });
+
+    // help modal
+    const helpModal = $('#helpModal');
+    const openHelp = () => helpModal.classList.add('open');
+    const closeHelp = () => helpModal.classList.remove('open');
+    $('#how').onclick = openHelp; $('#openHelp').onclick = openHelp; $('#closeHelp').onclick = closeHelp;
+    helpModal.addEventListener('click', (e)=>{ if(e.target===helpModal) closeHelp(); });
+
+    // copy whole html
+    $('#copyBtn').addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText(document.documentElement.outerHTML);
+        const btn = $('#copyBtn'); const txt = btn.textContent;
+        btn.textContent = '已复制 ✓';
+        setTimeout(()=>btn.textContent = txt, 1600);
+      }catch{
+        alert('复制失败，请手动全选复制');
+      }
+    });
+
+    // open Reaction Timer
+    document.querySelector('[data-open="rt"]').addEventListener('click',()=>{
+      $('#rtModal').classList.add('open');
+    });
+
+    // Reaction Timer core
+    const rt = {
+      state: 'idle', // idle|waiting|ready|done
+      t0: 0,
+      to: null,
+    };
+    const stage = $('#rtStage');
+    const hint = $('#rtHint');
+    const res = $('#rtResult');
+    const startBtn = $('#rtStart');
+    const retryBtn = $('#rtRetry');
+
+    function resetRT(){
+      rt.state='idle';
+      stage.style.background = '#0b132b';
+      hint.className='rt-hint';
+      hint.textContent = '点击下方按钮开始，等待屏幕提示“点我！”再尽快点击。';
+      res.textContent='—';
+      retryBtn.disabled=true;
+    }
+    resetRT();
+
+    startBtn.onclick = ()=>{
+      if(rt.state!=='idle'&&rt.state!=='done') return;
+      rt.state='waiting';
+      res.textContent='—';
+      stage.style.background = '#0b132b';
+      hint.className='rt-hint';
+      hint.textContent='请等待… (如果此时点击，将判定为过早)';
+      const delay = 800 + Math.random()*1800; // 0.8s - 2.6s
+      clearTimeout(rt.to);
+      rt.to = setTimeout(()=>{
+        rt.state='ready';
+        rt.t0 = performance.now();
+        stage.style.background = '#10381f';
+        hint.className='rt-big';
+        hint.textContent='点我！';
+      }, delay);
+    };
+
+    stage.onclick = ()=>{
+      if(rt.state==='waiting'){
+        clearTimeout(rt.to);
+        stage.style.background = '#3e1420';
+        hint.className='rt-hint';
+        hint.textContent='过早了！等变成“点我！”再点，点“再来一次”。';
+        res.textContent='判定：过早';
+        rt.state='done';
+        retryBtn.disabled=false;
+      } else if(rt.state==='ready'){
+        const dt = Math.round(performance.now()-rt.t0);
+        stage.style.background = '#0b132b';
+        hint.className='rt-hint';
+        hint.textContent='点击下方按钮开始，等待提示后再点。';
+        res.textContent = `你的反应时间：${dt} ms`;
+        rt.state='done';
+        retryBtn.disabled=false;
+      }
+    };
+
+    retryBtn.onclick = ()=>{ resetRT(); };
+
+    // close Reaction Timer modal
+    $('#rtClose').onclick = ()=>{ $('#rtModal').classList.remove('open'); resetRT(); };
+    $('#rtModal').addEventListener('click',(e)=>{ if(e.target.id==='rtModal'){ $('#rtModal').classList.remove('open'); resetRT(); }});
+  </script>
+</body>
+</html>
