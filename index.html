@@ -70,10 +70,10 @@
       </article>
 
       <!-- Card: 占位 -->
-      <article class="card" data-title="点击挑战（即将上线）">
-        <div class="thumb">点击挑战（Coming soon）</div>
+      <article class="card" data-title="点击挑战">
+        <div class="thumb">点击挑战（5 秒内尽可能多点）</div>
         <div class="meta"><span>难度：⭐</span><span>类型：点击</span></div>
-        <button class="btn secondary" disabled>即将上线</button>
+        <button class="btn" data-open="clicker">开始游戏</button>
       </article>
 
       <article class="card" data-title="躲避方块（即将上线）">
@@ -121,6 +121,32 @@
             <button class="btn" id="rtStart">开始</button>
             <button class="deploy" id="rtRetry" disabled>再来一次</button>
             <span class="rt-hint" id="rtResult">—</span>
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Click Challenge Modal -->
+  <div class="modal" id="clickerModal" aria-hidden="true">
+    <div class="panel">
+      <header>
+        <h3>🖱️ 点击挑战（5 秒）</h3>
+        <button class="deploy" id="clickerClose">退出</button>
+      </header>
+      <div class="body">
+        <div class="rt-wrap">
+          <div class="rt-stage" id="clickerStage">
+            <div class="rt-hint" id="clickerHint">点击“开始”后，5 秒内尽可能多地点下方大按钮。</div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <button class="btn" id="clickerStart">开始</button>
+            <button class="deploy" id="clickerRetry" disabled>再来一次</button>
+            <span class="rt-hint" id="clickerResult">—</span>
+          </div>
+          <div style="display:grid;gap:10px;justify-items:center;margin-top:6px">
+            <button class="btn" id="clickerBig" style="font-size:20px;padding:18px 20px;border-radius:16px" disabled>点我 +1</button>
+            <div class="rt-hint">剩余时间：<span id="clickerTime">5.0</span>s　当前点击：<span id="clickerScore">0</span></div>
           </div>
         </div>
       </div>
@@ -225,12 +251,76 @@
         retryBtn.disabled=false;
       }
     };
-
     retryBtn.onclick = ()=>{ resetRT(); };
 
     // close Reaction Timer modal
     $('#rtClose').onclick = ()=>{ $('#rtModal').classList.remove('open'); resetRT(); };
     $('#rtModal').addEventListener('click',(e)=>{ if(e.target.id==='rtModal'){ $('#rtModal').classList.remove('open'); resetRT(); }});
+
+    // --- Click Challenge ---
+    document.querySelector('[data-open="clicker"]').addEventListener('click',()=>{
+      $('#clickerModal').classList.add('open');
+    });
+
+    const ck = {
+      state: 'idle', // idle|running|done
+      score: 0,
+      tEnd: 0,
+      timer: null
+    };
+    const ckStage = $('#clickerStage');
+    const ckHint = $('#clickerHint');
+    const ckRes = $('#clickerResult');
+    const ckStart = $('#clickerStart');
+    const ckRetry = $('#clickerRetry');
+    const ckBig = $('#clickerBig');
+    const ckTime = $('#clickerTime');
+    const ckScore = $('#clickerScore');
+
+    function resetCK(){
+      ck.state='idle'; ck.score=0; ck.tEnd=0; clearInterval(ck.timer);
+      ckStage.style.background='#0b132b';
+      ckHint.textContent='点击“开始”后，5 秒内尽可能多地点下方大按钮。';
+      ckRes.textContent='—';
+      ckTime.textContent='5.0';
+      ckScore.textContent='0';
+      ckRetry.disabled=true;
+      ckBig.disabled=true;
+    }
+    resetCK();
+
+    ckStart.onclick = ()=>{
+      if(ck.state==='running') return;
+      ck.state='running'; ck.score=0; ckScore.textContent='0';
+      ckBig.disabled=false; ckRetry.disabled=true; ckRes.textContent='—';
+      ckStage.style.background='#0b132b';
+      const DUR = 5000; // 5s
+      ck.tEnd = performance.now() + DUR;
+      const tick = ()=>{
+        const left = Math.max(0, ck.tEnd - performance.now());
+        ckTime.textContent = (left/1000).toFixed(1);
+        if(left<=0){
+          clearInterval(ck.timer);
+          ck.state='done'; ckBig.disabled=true; ckRetry.disabled=false;
+          ckRes.textContent=`你的成绩：${ck.score} 次`;
+        }
+      };
+      clearInterval(ck.timer); ck.timer = setInterval(tick, 100);
+      tick();
+    };
+
+    ckBig.onclick = ()=>{
+      if(ck.state!=='running') return;
+      ck.score++; ckScore.textContent = String(ck.score);
+      ckStage.style.background = '#0f253f';
+      setTimeout(()=>{ ckStage.style.background='#0b132b'; }, 60);
+    };
+
+    ckRetry.onclick = ()=>{ resetCK(); };
+
+    // close Clicker modal
+    $('#clickerClose').onclick = ()=>{ $('#clickerModal').classList.remove('open'); resetCK(); };
+    $('#clickerModal').addEventListener('click',(e)=>{ if(e.target.id==='clickerModal'){ $('#clickerModal').classList.remove('open'); resetCK(); }});
   </script>
 </body>
 </html>
