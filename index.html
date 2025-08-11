@@ -4,156 +4,70 @@
   <meta charset="utf-8" />
   <title>Monster Survivors — Play Online</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Play Monster Survivors online — a fast-paced survival arena game. Dodge, upgrade, and outlast waves of monsters right in your browser." />
-  <link rel="canonical" href="https://yourdomain.com/monster-survivors" />
+  <meta name="description" content="Play Monster Survivors online — a fast‑paced survival arena. Dodge, upgrade, and outlast waves of monsters right in your browser." />
+  <link rel="canonical" href="https://yourdomain.com/games/monster-survivors/" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Monster Survivors — Play Online" />
-  <meta property="og:description" content="Survive relentless waves, level up fast, and chase high scores. No download needed." />
+  <meta property="og:description" content="Survive relentless waves, level up, and chase high scores. No download needed." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://yourdomain.com/monster-survivors" />
+  <meta property="og:url" content="https://yourdomain.com/games/monster-survivors/" />
 
-  <!-- Theme color -->
   <meta name="theme-color" content="#007AFF" />
-
-  <!-- Favicon (emoji, inline) -->
   <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><text y="50%" x="50%" dominant-baseline="middle" text-anchor="middle" font-size="52">🎮</text></svg>'>
 
   <style>
-    /* Apple-inspired aesthetic: spacious layout, SF-like stack, accent blues/greens, soft depth */
     :root{
-      --bg: #F5F5F7;        /* macOS light gray */
-      --card: #FFFFFF;
-      --ink: #0A0A0A;
-      --muted: #6E6E73;
-      --accent: #007AFF;    /* iOS blue */
-      --success: #34C759;   /* iOS green */
-      --border: #E5E5EA;
-      --radius: 16px;
-      --shadow: 0 8px 30px rgba(0,0,0,.06);
-      --maxw: 1100px;
+      --bg:#F5F5F7; --card:#FFFFFF; --ink:#0A0A0A; --muted:#6E6E73;
+      --accent:#007AFF; --success:#34C759; --border:#E5E5EA;
+      --radius:16px; --shadow:0 8px 30px rgba(0,0,0,.06); --maxw:1100px;
     }
     @media (prefers-color-scheme: dark){
-      :root{
-        --bg: #0B0B10;
-        --card: #111114;
-        --ink: #F2F2F7;
-        --muted: #9A9AA1;
-        --border: #2C2C30;
-        --shadow: 0 10px 40px rgba(0,0,0,.45);
-      }
+      :root{ --bg:#0B0B10; --card:#111114; --ink:#F2F2F7; --muted:#9A9AA1; --border:#2C2C30; --shadow:0 10px 40px rgba(0,0,0,.45); }
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
-      margin: 0;
-      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
+      margin:0; background:var(--bg); color:var(--ink); line-height:1.6;
+      font-family: ui-sans-serif,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",system-ui,sans-serif;
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 28px 18px 60px;
-    }
-    header{
-      display: grid;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-    h1{
-      margin: 0;
-      font-size: clamp(28px, 4vw, 40px);
-      letter-spacing: -.02em;
-    }
-    .tagline{
-      color: var(--muted);
-      font-size: clamp(14px, 2.2vw, 16px);
-      margin: 0;
-    }
-
-    .card{
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    /* Responsive iframe container */
-    .player{
-      position: relative;
-      width: 100%;
-      /* Default: 16:9; on mobile we shift closer to 3:4 to use vertical space better */
-      aspect-ratio: 16 / 9;
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px 18px 60px}
+    header{display:grid; gap:8px; margin-bottom:18px}
+    h1{margin:0; font-size:clamp(28px,4vw,40px); letter-spacing:-.02em}
+    .tagline{color:var(--muted); font-size:clamp(14px,2.2vw,16px); margin:0}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+    .player{position:relative; width:100%; aspect-ratio:16/9; border-bottom:1px solid var(--border);
       background:
         radial-gradient(1200px 600px at 50% -20%, rgba(0,122,255,.25), transparent 60%),
         linear-gradient(180deg, rgba(0,122,255,.06), transparent 40%);
-      border-bottom: 1px solid var(--border);
     }
-    @media (max-width: 720px){
-      .player{ aspect-ratio: 4 / 3; }
-    }
-    .player iframe{
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      border: 0; border-radius: 0;
-    }
-
-    .content{
-      padding: 18px clamp(14px, 3vw, 22px) 22px;
-      display: grid;
-      gap: 20px;
-    }
-    h2{
-      font-size: clamp(18px, 2.6vw, 22px);
-      margin: 10px 0 6px;
-      letter-spacing: -.01em;
-    }
-    .meta{
-      display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
-      color: var(--muted); font-size: 14px;
-    }
-    .chip{
-      padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px;
-      display: inline-flex; align-items: center; gap: 8px; background: transparent;
-    }
-    .chip .dot{
-      width: 8px; height: 8px; border-radius: 999px; background: var(--success);
-      box-shadow: 0 0 0 3px rgba(52,199,89,.15);
-    }
-    .actions{
-      display: flex; flex-wrap: wrap; gap: 10px;
-    }
-    .btn{
-      appearance: none; border: 1px solid var(--border); background: #fff;
-      padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 600;
-    }
-    .btn.primary{
-      background: var(--accent); color: #fff; border-color: var(--accent);
-    }
-    .muted{ color: var(--muted); }
-
-    footer{
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 22px;
-      text-align: center;
-    }
-    a{ color: var(--accent); text-decoration: none; }
-    a:hover{ text-decoration: underline; }
+    @media (max-width: 720px){ .player{ aspect-ratio: 4/3; } }
+    .player iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+    .content{padding:18px clamp(14px,3vw,22px) 22px; display:grid; gap:20px}
+    h2{font-size:clamp(18px,2.6vw,22px); margin:10px 0 6px; letter-spacing:-.01em}
+    .meta{display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; color:var(--muted); font-size:14px}
+    .chip{padding:6px 10px; border:1px solid var(--border); border-radius:999px; display:inline-flex; align-items:center; gap:8px}
+    .chip .dot{width:8px; height:8px; border-radius:999px; background:var(--success); box-shadow:0 0 0 3px rgba(52,199,89,.15)}
+    .list{padding-left:18px; margin:8px 0}
+    .actions{display:flex; flex-wrap:wrap; gap:10px}
+    .btn{appearance:none; border:1px solid var(--border); background:#fff; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600}
+    .btn.primary{background:var(--accent); color:#fff; border-color:var(--accent)}
+    .muted{color:var(--muted)}
+    footer{color:var(--muted); font-size:13px; margin-top:22px; text-align:center}
+    a{color:var(--accent); text-decoration:none} a:hover{text-decoration:underline}
+    .back{display:inline-flex; align-items:center; gap:8px; font-weight:600}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
+      <a class="back" href="/" aria-label="Back to Game Hub">← Back to Game Hub</a>
       <h1>Monster Survivors</h1>
-      <p class="tagline">A fast-paced survival arena: dodge, upgrade, and outlast relentless waves — right in your browser.</p>
+      <p class="tagline">A fast‑paced survival arena: dodge, upgrade, and outlast relentless waves — right in your browser.</p>
     </header>
 
-    <section class="card">
+    <section class="card" id="play">
       <div class="player" role="region" aria-label="Monster Survivors game player">
         <iframe
           src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html"
@@ -168,54 +82,50 @@
           <span class="chip"><span class="dot"></span> Play instantly — no download</span>
           <span>Genre: Action · Survival · Roguelite</span>
           <span>Platform: Web (Desktop & Mobile)</span>
-          <span>Session length: 5–10 minutes</span>
+          <span>Typical session: 5–10 minutes</span>
         </div>
 
         <div>
           <h2>About the Game</h2>
-          <p>
-            Monster Survivors drops you into a compact arena where enemies swarm from every direction.
-            Survive as long as possible by collecting XP, leveling up, and choosing power‑ups that stack into wild builds.
-            It’s quick to learn, hard to master, and perfect for short bursts.
-          </p>
+          <p>Monster Survivors drops you into a compact arena where enemies swarm from every direction. Survive as long as possible by collecting XP, leveling up, and choosing power‑ups that stack into wild builds. It’s quick to learn, hard to master, and perfect for short bursts.</p>
         </div>
 
         <div>
           <h2>How to Play</h2>
-          <ul>
+          <ul class="list">
             <li><strong>Move</strong> to avoid enemy collisions and pick up XP gems.</li>
-            <li><strong>Level Up</strong> to pick upgrades that boost damage, range, or survivability.</li>
-            <li><strong>Survive</strong> increasingly dense waves to push your personal best.</li>
+            <li><strong>Level Up</strong> to select upgrades that boost damage, area, or survivability.</li>
+            <li><strong>Survive</strong> increasingly dense waves to push a new personal best.</li>
           </ul>
         </div>
 
         <div>
           <h2>Controls</h2>
-          <ul>
+          <ul class="list">
             <li><strong>Desktop:</strong> WASD / Arrow keys to move. Mouse for menus.</li>
-            <li><strong>Mobile:</strong> Virtual joystick / touch controls (where supported by the game).</li>
+            <li><strong>Mobile:</strong> Touch/virtual controls (as provided by the game).</li>
           </ul>
         </div>
 
         <div>
           <h2>Tips for High Scores</h2>
-          <ul>
-            <li>Prioritize area‑of‑effect and survivability early; scale damage as density rises.</li>
-            <li>Kite enemies into predictable paths to maximize XP gains safely.</li>
-            <li>Don’t tunnel on damage: movement and pickup radius often matter more.</li>
+          <ul class="list">
+            <li>Prioritize area‑of‑effect early; scale damage as enemy density rises.</li>
+            <li>Kite enemies into predictable paths to collect XP safely.</li>
+            <li>Movement speed and pickup radius can be as important as raw DPS.</li>
           </ul>
         </div>
 
         <div class="actions">
           <a class="btn primary" href="#play" onclick="window.scrollTo({top:0,behavior:'smooth'})">Play Now</a>
-          <a class="btn" href="https://yourdomain.com/monster-survivors" rel="canonical">Canonical Page</a>
-          <span class="muted">Works great on Chrome, Safari, and modern mobile browsers.</span>
+          <a class="btn" href="https://yourdomain.com/games/monster-survivors/" rel="canonical">Canonical Page</a>
+          <span class="muted">Works great on Safari, Chrome, and modern mobile browsers.</span>
         </div>
       </div>
     </section>
 
     <footer>
-      © 2025 Monster Survivors (Fan Page). This page embeds the game for ease of access.
+      © 2025 Game Hub. This page embeds the game for ease of access.
       If the game fails to load, please check your network or try a different browser.
       <noscript>Enable JavaScript to play.</noscript>
     </footer>
