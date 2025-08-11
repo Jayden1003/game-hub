@@ -4,7 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mini Game Hub | 小游戏合集（首版）</title>
-  <meta name="description" content="超轻量小游戏合集网站，一键上线示例。" />
+  $1  <meta name="keywords" content="小游戏, 小游戏合集, 反应速度, 点击挑战, 休闲游戏"/>
+  <meta name="theme-color" content="#0b1020"/>
+  <meta property="og:title" content="Mini Game Hub | 小游戏合集"/>
+  <meta property="og:description" content="超轻量小游戏合集网站，打开即玩。"/>
+  <meta property="og:type" content="website"/>
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230b1020"/><text x="50%" y="54%" text-anchor="middle" font-size="34" fill="%235ee0a3" font-family="Segoe UI, Arial, sans-serif">🎮</text></svg>'/>
+  <link rel="apple-touch-icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230b1020"/><text x="50%" y="54%" text-anchor="middle" font-size="34" fill="%235ee0a3" font-family="Segoe UI, Arial, sans-serif">🎮</text></svg>'/>
   <style>
     :root{--bg:#0b1020;--card:#111731;--muted:#8a93ad;--text:#e9ecf1;--accent:#5ee0a3;--border:#1c2342}
     *{box-sizing:border-box}
@@ -53,7 +59,10 @@
         <div class="title">🎮 Mini Game Hub <span class="badge">v0.1</span></div>
         <p class="desc">首个可上线模板：自带 1 款小游戏，可扩展合集列表。</p>
       </div>
-      <button class="deploy" id="copyBtn" title="复制整页代码">复制代码</button>
+      <div style="display:flex; gap:8px; align-items:center">
+        <button class="deploy" id="copyBtn" title="复制整页代码">复制代码</button>
+        <button class="deploy" id="openStats">查看统计</button>
+      </div>
     </header>
 
     <div class="toolbar">
@@ -149,6 +158,29 @@
             <div class="rt-hint">剩余时间：<span id="clickerTime">5.0</span>s　当前点击：<span id="clickerScore">0</span></div>
           </div>
         </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- 站点统计 Modal -->
+  <div class="modal" id="statsModal" aria-hidden="true">
+    <div class="panel">
+      <header>
+        <h3>📈 站点统计（本地轻量版）</h3>
+        <button class="deploy" id="closeStats">关闭</button>
+      </header>
+      <div class="body">
+        <ul style="margin:0;padding-left:18px;line-height:1.9">
+          <li>累计访问（此设备）：<strong id="stVisits">0</strong></li>
+          <li>本次会话次数：<strong id="stSessions">0</strong></li>
+          <li>反应速度测试游玩：<strong id="stRT">0</strong></li>
+          <li>点击挑战游玩：<strong id="stCK">0</strong></li>
+        </ul>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="exportStats">导出统计 JSON</button>
+          <button class="deploy" id="resetStats">清零（仅此设备）</button>
+        </div>
+        <p class="desc" style="margin-top:10px">说明：为隐私与零成本考虑，统计数据仅存于用户浏览器的本地存储（localStorage / sessionStorage），不上传服务器。</p>
       </div>
     </div>
   </div>
@@ -174,6 +206,42 @@
     const closeHelp = () => helpModal.classList.remove('open');
     $('#how').onclick = openHelp; $('#openHelp').onclick = openHelp; $('#closeHelp').onclick = closeHelp;
     helpModal.addEventListener('click', (e)=>{ if(e.target===helpModal) closeHelp(); });
+
+    // stats modal open/close
+    const statsModal = $('#statsModal');
+    const openStats = () => statsModal.classList.add('open');
+    const closeStats = () => statsModal.classList.remove('open');
+    $('#openStats').onclick = openStats; $('#closeStats').onclick = closeStats;
+    statsModal.addEventListener('click',(e)=>{ if(e.target===statsModal) closeStats(); });
+
+    // ---- lightweight local stats (no account, client-only) ----
+    const ST_KEY = 'mg_stats_v1';
+    const ST_SESS = 'mg_session_started';
+    function loadStats(){
+      try{ return JSON.parse(localStorage.getItem(ST_KEY)) || {visits:0,sessions:0,plays:{rt:0,ck:0}} }catch{ return {visits:0,sessions:0,plays:{rt:0,ck:0}} }
+    }
+    function saveStats(st){ localStorage.setItem(ST_KEY, JSON.stringify(st)); }
+    function inc(path){ const st = loadStats(); if(path==='visits') st.visits++; else if(path==='sessions') st.sessions++; else if(path==='rt') st.plays.rt++; else if(path==='ck') st.plays.ck++; saveStats(st); return st; }
+    // page load counters
+    inc('visits');
+    if(!sessionStorage.getItem(ST_SESS)){ sessionStorage.setItem(ST_SESS,'1'); inc('sessions'); }
+
+    // bind to modal render
+    function renderStats(){
+      const st = loadStats();
+      $('#stVisits').textContent = st.visits;
+      $('#stSessions').textContent = st.sessions;
+      $('#stRT').textContent = st.plays.rt;
+      $('#stCK').textContent = st.plays.ck;
+    }
+    $('#openStats').addEventListener('click', renderStats);
+    // export & reset
+    $('#exportStats').addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(loadStats(),null,2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href=url; a.download='mini-game-stats.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 1000);
+    });
+    $('#resetStats').addEventListener('click', ()=>{ localStorage.removeItem(ST_KEY); renderStats(); }); });
 
     // copy whole html
     $('#copyBtn').addEventListener('click', async () => {
@@ -240,6 +308,7 @@
         hint.textContent='过早了！等变成“点我！”再点，点“再来一次”。';
         res.textContent='判定：过早';
         rt.state='done';
+        inc('rt');
         retryBtn.disabled=false;
       } else if(rt.state==='ready'){
         const dt = Math.round(performance.now()-rt.t0);
@@ -302,6 +371,7 @@
         if(left<=0){
           clearInterval(ck.timer);
           ck.state='done'; ckBig.disabled=true; ckRetry.disabled=false;
+          inc('ck');
           ckRes.textContent=`你的成绩：${ck.score} 次`;
         }
       };
