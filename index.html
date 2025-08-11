@@ -1,396 +1,224 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
+  <title>Monster Survivors — Play Online</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mini Game Hub | 小游戏合集（首版）</title>
-  $1  <meta name="keywords" content="小游戏, 小游戏合集, 反应速度, 点击挑战, 休闲游戏"/>
-  <meta name="theme-color" content="#0b1020"/>
-  <meta property="og:title" content="Mini Game Hub | 小游戏合集"/>
-  <meta property="og:description" content="超轻量小游戏合集网站，打开即玩。"/>
-  <meta property="og:type" content="website"/>
-  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230b1020"/><text x="50%" y="54%" text-anchor="middle" font-size="34" fill="%235ee0a3" font-family="Segoe UI, Arial, sans-serif">🎮</text></svg>'/>
-  <link rel="apple-touch-icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230b1020"/><text x="50%" y="54%" text-anchor="middle" font-size="34" fill="%235ee0a3" font-family="Segoe UI, Arial, sans-serif">🎮</text></svg>'/>
+  <meta name="description" content="Play Monster Survivors online — a fast-paced survival arena game. Dodge, upgrade, and outlast waves of monsters right in your browser." />
+  <link rel="canonical" href="https://yourdomain.com/monster-survivors" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Monster Survivors — Play Online" />
+  <meta property="og:description" content="Survive relentless waves, level up fast, and chase high scores. No download needed." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourdomain.com/monster-survivors" />
+
+  <!-- Theme color -->
+  <meta name="theme-color" content="#007AFF" />
+
+  <!-- Favicon (emoji, inline) -->
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><text y="50%" x="50%" dominant-baseline="middle" text-anchor="middle" font-size="52">🎮</text></svg>'>
+
   <style>
-    :root{--bg:#0b1020;--card:#111731;--muted:#8a93ad;--text:#e9ecf1;--accent:#5ee0a3;--border:#1c2342}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial,"Noto Sans",sans-serif;background:linear-gradient(180deg,#0b1020,#111737);color:var(--text)}
-    .wrap{max-width:1000px;margin:0 auto;padding:24px}
-    header{display:flex;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}
-    .title{font-size:22px;font-weight:700;letter-spacing:.3px;display:flex;align-items:center;gap:10px}
-    .badge{font-size:12px;color:#0b1020;background:var(--accent);padding:2px 8px;border-radius:999px}
-    .desc{color:var(--muted);font-size:14px;margin:4px 0 0}
+    /* Apple-inspired aesthetic: spacious layout, SF-like stack, accent blues/greens, soft depth */
+    :root{
+      --bg: #F5F5F7;        /* macOS light gray */
+      --card: #FFFFFF;
+      --ink: #0A0A0A;
+      --muted: #6E6E73;
+      --accent: #007AFF;    /* iOS blue */
+      --success: #34C759;   /* iOS green */
+      --border: #E5E5EA;
+      --radius: 16px;
+      --shadow: 0 8px 30px rgba(0,0,0,.06);
+      --maxw: 1100px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0B0B10;
+        --card: #111114;
+        --ink: #F2F2F7;
+        --muted: #9A9AA1;
+        --border: #2C2C30;
+        --shadow: 0 10px 40px rgba(0,0,0,.45);
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrap{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+    header{
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    h1{
+      margin: 0;
+      font-size: clamp(28px, 4vw, 40px);
+      letter-spacing: -.02em;
+    }
+    .tagline{
+      color: var(--muted);
+      font-size: clamp(14px, 2.2vw, 16px);
+      margin: 0;
+    }
 
-    .toolbar{display:flex;gap:10px;align-items:center;margin:16px 0}
-    input[type="search"]{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;outline:none}
-    .deploy{background:transparent;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer}
-    .deploy:hover{border-color:#33406d}
+    .card{
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px;transition:transform .15s ease, box-shadow .15s ease}
-    .card:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
-    .thumb{height:140px;border-radius:12px;background:linear-gradient(135deg,#1d2447,#131b3b);border:1px dashed #2a335f;display:grid;place-items:center;color:var(--muted);font-size:13px}
-    .meta{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px}
-    .btn{background:var(--accent);color:#0b1020;border:none;padding:10px 12px;border-radius:12px;font-weight:700;cursor:pointer}
-    .btn.secondary{background:#263054;color:var(--text)}
+    /* Responsive iframe container */
+    .player{
+      position: relative;
+      width: 100%;
+      /* Default: 16:9; on mobile we shift closer to 3:4 to use vertical space better */
+      aspect-ratio: 16 / 9;
+      background:
+        radial-gradient(1200px 600px at 50% -20%, rgba(0,122,255,.25), transparent 60%),
+        linear-gradient(180deg, rgba(0,122,255,.06), transparent 40%);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (max-width: 720px){
+      .player{ aspect-ratio: 4 / 3; }
+    }
+    .player iframe{
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: 0; border-radius: 0;
+    }
 
-    /* Modal */
-    .modal{position:fixed;inset:0;background:rgba(3,6,20,.65);display:none;align-items:center;justify-content:center;padding:20px}
-    .modal.open{display:flex}
-    .panel{width:min(720px,100%);background:#0e1533;border:1px solid var(--border);border-radius:18px;overflow:hidden}
-    .panel header{padding:14px 16px;border-bottom:1px solid var(--border);gap:8px}
-    .panel header h3{margin:0;font-size:16px}
-    .panel .body{padding:16px}
+    .content{
+      padding: 18px clamp(14px, 3vw, 22px) 22px;
+      display: grid;
+      gap: 20px;
+    }
+    h2{
+      font-size: clamp(18px, 2.6vw, 22px);
+      margin: 10px 0 6px;
+      letter-spacing: -.01em;
+    }
+    .meta{
+      display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center;
+      color: var(--muted); font-size: 14px;
+    }
+    .chip{
+      padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 8px; background: transparent;
+    }
+    .chip .dot{
+      width: 8px; height: 8px; border-radius: 999px; background: var(--success);
+      box-shadow: 0 0 0 3px rgba(52,199,89,.15);
+    }
+    .actions{
+      display: flex; flex-wrap: wrap; gap: 10px;
+    }
+    .btn{
+      appearance: none; border: 1px solid var(--border); background: #fff;
+      padding: 10px 14px; border-radius: 12px; cursor: pointer; font-weight: 600;
+    }
+    .btn.primary{
+      background: var(--accent); color: #fff; border-color: var(--accent);
+    }
+    .muted{ color: var(--muted); }
 
-    /* Reaction Timer Game */
-    .rt-wrap{display:grid;gap:14px}
-    .rt-stage{height:280px;border-radius:12px;border:1px dashed #33406d;display:grid;place-items:center;background:#0b132b}
-    .rt-hint{color:var(--muted);font-size:13px}
-    .rt-big{font-size:42px;font-weight:800}
-
-    footer{margin:30px 0 10px;color:var(--muted);font-size:12px;text-align:center}
-    a{color:var(--accent);text-decoration:none}
+    footer{
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 22px;
+      text-align: center;
+    }
+    a{ color: var(--accent); text-decoration: none; }
+    a:hover{ text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div>
-        <div class="title">🎮 Mini Game Hub <span class="badge">v0.1</span></div>
-        <p class="desc">首个可上线模板：自带 1 款小游戏，可扩展合集列表。</p>
-      </div>
-      <div style="display:flex; gap:8px; align-items:center">
-        <button class="deploy" id="copyBtn" title="复制整页代码">复制代码</button>
-        <button class="deploy" id="openStats">查看统计</button>
-      </div>
+      <h1>Monster Survivors</h1>
+      <p class="tagline">A fast-paced survival arena: dodge, upgrade, and outlast relentless waves — right in your browser.</p>
     </header>
 
-    <div class="toolbar">
-      <input id="search" type="search" placeholder="搜索游戏，例如：反应、点击…" />
-      <button class="deploy" id="how">使用说明</button>
-    </div>
+    <section class="card">
+      <div class="player" role="region" aria-label="Monster Survivors game player">
+        <iframe
+          src="https://cloud.onlinegames.io/games/2025/unity/monster-survivors/index-og.html"
+          title="Monster Survivors — Online Game"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+      <div class="content">
+        <div class="meta">
+          <span class="chip"><span class="dot"></span> Play instantly — no download</span>
+          <span>Genre: Action · Survival · Roguelite</span>
+          <span>Platform: Web (Desktop & Mobile)</span>
+          <span>Session length: 5–10 minutes</span>
+        </div>
 
-    <section class="grid" id="grid">
-      <!-- Card: Reaction Timer -->
-      <article class="card" data-title="反应速度测试">
-        <div class="thumb">反应速度测试（内置）</div>
-        <div class="meta"><span>难度：⭐</span><span>类型：反应</span></div>
-        <button class="btn" data-open="rt">开始游戏</button>
-      </article>
+        <div>
+          <h2>About the Game</h2>
+          <p>
+            Monster Survivors drops you into a compact arena where enemies swarm from every direction.
+            Survive as long as possible by collecting XP, leveling up, and choosing power‑ups that stack into wild builds.
+            It’s quick to learn, hard to master, and perfect for short bursts.
+          </p>
+        </div>
 
-      <!-- Card: 占位 -->
-      <article class="card" data-title="点击挑战">
-        <div class="thumb">点击挑战（5 秒内尽可能多点）</div>
-        <div class="meta"><span>难度：⭐</span><span>类型：点击</span></div>
-        <button class="btn" data-open="clicker">开始游戏</button>
-      </article>
+        <div>
+          <h2>How to Play</h2>
+          <ul>
+            <li><strong>Move</strong> to avoid enemy collisions and pick up XP gems.</li>
+            <li><strong>Level Up</strong> to pick upgrades that boost damage, range, or survivability.</li>
+            <li><strong>Survive</strong> increasingly dense waves to push your personal best.</li>
+          </ul>
+        </div>
 
-      <article class="card" data-title="躲避方块（即将上线）">
-        <div class="thumb">躲避方块（Coming soon）</div>
-        <div class="meta"><span>难度：⭐⭐</span><span>类型：躲避</span></div>
-        <button class="btn secondary" disabled>即将上线</button>
-      </article>
+        <div>
+          <h2>Controls</h2>
+          <ul>
+            <li><strong>Desktop:</strong> WASD / Arrow keys to move. Mouse for menus.</li>
+            <li><strong>Mobile:</strong> Virtual joystick / touch controls (where supported by the game).</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>Tips for High Scores</h2>
+          <ul>
+            <li>Prioritize area‑of‑effect and survivability early; scale damage as density rises.</li>
+            <li>Kite enemies into predictable paths to maximize XP gains safely.</li>
+            <li>Don’t tunnel on damage: movement and pickup radius often matter more.</li>
+          </ul>
+        </div>
+
+        <div class="actions">
+          <a class="btn primary" href="#play" onclick="window.scrollTo({top:0,behavior:'smooth'})">Play Now</a>
+          <a class="btn" href="https://yourdomain.com/monster-survivors" rel="canonical">Canonical Page</a>
+          <span class="muted">Works great on Chrome, Safari, and modern mobile browsers.</span>
+        </div>
+      </div>
     </section>
 
-    <footer>© 2025 Mini Game Hub. 免费模板，随意使用与修改。由 <a href="#" id="openHelp">使用指南</a> 提供支持。</footer>
+    <footer>
+      © 2025 Monster Survivors (Fan Page). This page embeds the game for ease of access.
+      If the game fails to load, please check your network or try a different browser.
+      <noscript>Enable JavaScript to play.</noscript>
+    </footer>
   </div>
-
-  <!-- 使用说明 Modal -->
-  <div class="modal" id="helpModal" aria-hidden="true">
-    <div class="panel">
-      <header>
-        <h3>🚀 使用说明（5 分钟上线）</h3>
-        <button class="deploy" id="closeHelp">关闭</button>
-      </header>
-      <div class="body">
-        <ol>
-          <li>复制本页全部代码（右上角“复制代码”）。</li>
-          <li>去 <strong>GitHub</strong> 新建仓库，例如 <code>game-hub</code>，新建文件 <code>index.html</code>，粘贴保存。</li>
-          <li>用 <strong>Vercel</strong> 绑定 GitHub，一键导入该仓库并部署，立刻获得国外可访问的网址。</li>
-          <li>以后你只要继续在 <code>index.html</code> 里添加新游戏模块，就能扩充你的合集。</li>
-        </ol>
-        <p class="desc">如果你不熟悉 GitHub / Vercel，回到聊天让我带你手把手做。</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reaction Timer Modal -->
-  <div class="modal" id="rtModal" aria-hidden="true">
-    <div class="panel">
-      <header>
-        <h3>⚡ 反应速度测试</h3>
-        <button class="deploy" id="rtClose">退出</button>
-      </header>
-      <div class="body">
-        <div class="rt-wrap">
-          <div class="rt-stage" id="rtStage">
-            <div class="rt-hint" id="rtHint">点击下方按钮开始，等待屏幕提示“点我！”再尽快点击。</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <button class="btn" id="rtStart">开始</button>
-            <button class="deploy" id="rtRetry" disabled>再来一次</button>
-            <span class="rt-hint" id="rtResult">—</span>
-          </div>
-        </div>
-    </div>
-    </div>
-  </div>
-
-  <!-- Click Challenge Modal -->
-  <div class="modal" id="clickerModal" aria-hidden="true">
-    <div class="panel">
-      <header>
-        <h3>🖱️ 点击挑战（5 秒）</h3>
-        <button class="deploy" id="clickerClose">退出</button>
-      </header>
-      <div class="body">
-        <div class="rt-wrap">
-          <div class="rt-stage" id="clickerStage">
-            <div class="rt-hint" id="clickerHint">点击“开始”后，5 秒内尽可能多地点下方大按钮。</div>
-          </div>
-          <div style="display:flex;gap:10px;align-items:center">
-            <button class="btn" id="clickerStart">开始</button>
-            <button class="deploy" id="clickerRetry" disabled>再来一次</button>
-            <span class="rt-hint" id="clickerResult">—</span>
-          </div>
-          <div style="display:grid;gap:10px;justify-items:center;margin-top:6px">
-            <button class="btn" id="clickerBig" style="font-size:20px;padding:18px 20px;border-radius:16px" disabled>点我 +1</button>
-            <div class="rt-hint">剩余时间：<span id="clickerTime">5.0</span>s　当前点击：<span id="clickerScore">0</span></div>
-          </div>
-        </div>
-    </div>
-    </div>
-  </div>
-
-  <!-- 站点统计 Modal -->
-  <div class="modal" id="statsModal" aria-hidden="true">
-    <div class="panel">
-      <header>
-        <h3>📈 站点统计（本地轻量版）</h3>
-        <button class="deploy" id="closeStats">关闭</button>
-      </header>
-      <div class="body">
-        <ul style="margin:0;padding-left:18px;line-height:1.9">
-          <li>累计访问（此设备）：<strong id="stVisits">0</strong></li>
-          <li>本次会话次数：<strong id="stSessions">0</strong></li>
-          <li>反应速度测试游玩：<strong id="stRT">0</strong></li>
-          <li>点击挑战游玩：<strong id="stCK">0</strong></li>
-        </ul>
-        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn" id="exportStats">导出统计 JSON</button>
-          <button class="deploy" id="resetStats">清零（仅此设备）</button>
-        </div>
-        <p class="desc" style="margin-top:10px">说明：为隐私与零成本考虑，统计数据仅存于用户浏览器的本地存储（localStorage / sessionStorage），不上传服务器。</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // --- small helpers ---
-    const $ = s => document.querySelector(s);
-    const $$ = s => Array.from(document.querySelectorAll(s));
-
-    // search filter
-    const search = $('#search');
-    search.addEventListener('input', () => {
-      const kw = search.value.trim().toLowerCase();
-      $$('#grid .card').forEach(c=>{
-        const t = (c.getAttribute('data-title')||'').toLowerCase();
-        c.style.display = t.includes(kw) ? '' : 'none';
-      });
-    });
-
-    // help modal
-    const helpModal = $('#helpModal');
-    const openHelp = () => helpModal.classList.add('open');
-    const closeHelp = () => helpModal.classList.remove('open');
-    $('#how').onclick = openHelp; $('#openHelp').onclick = openHelp; $('#closeHelp').onclick = closeHelp;
-    helpModal.addEventListener('click', (e)=>{ if(e.target===helpModal) closeHelp(); });
-
-    // stats modal open/close
-    const statsModal = $('#statsModal');
-    const openStats = () => statsModal.classList.add('open');
-    const closeStats = () => statsModal.classList.remove('open');
-    $('#openStats').onclick = openStats; $('#closeStats').onclick = closeStats;
-    statsModal.addEventListener('click',(e)=>{ if(e.target===statsModal) closeStats(); });
-
-    // ---- lightweight local stats (no account, client-only) ----
-    const ST_KEY = 'mg_stats_v1';
-    const ST_SESS = 'mg_session_started';
-    function loadStats(){
-      try{ return JSON.parse(localStorage.getItem(ST_KEY)) || {visits:0,sessions:0,plays:{rt:0,ck:0}} }catch{ return {visits:0,sessions:0,plays:{rt:0,ck:0}} }
-    }
-    function saveStats(st){ localStorage.setItem(ST_KEY, JSON.stringify(st)); }
-    function inc(path){ const st = loadStats(); if(path==='visits') st.visits++; else if(path==='sessions') st.sessions++; else if(path==='rt') st.plays.rt++; else if(path==='ck') st.plays.ck++; saveStats(st); return st; }
-    // page load counters
-    inc('visits');
-    if(!sessionStorage.getItem(ST_SESS)){ sessionStorage.setItem(ST_SESS,'1'); inc('sessions'); }
-
-    // bind to modal render
-    function renderStats(){
-      const st = loadStats();
-      $('#stVisits').textContent = st.visits;
-      $('#stSessions').textContent = st.sessions;
-      $('#stRT').textContent = st.plays.rt;
-      $('#stCK').textContent = st.plays.ck;
-    }
-    $('#openStats').addEventListener('click', renderStats);
-    // export & reset
-    $('#exportStats').addEventListener('click', ()=>{
-      const blob = new Blob([JSON.stringify(loadStats(),null,2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href=url; a.download='mini-game-stats.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(url), 1000);
-    });
-    $('#resetStats').addEventListener('click', ()=>{ localStorage.removeItem(ST_KEY); renderStats(); }); });
-
-    // copy whole html
-    $('#copyBtn').addEventListener('click', async () => {
-      try{
-        await navigator.clipboard.writeText(document.documentElement.outerHTML);
-        const btn = $('#copyBtn'); const txt = btn.textContent;
-        btn.textContent = '已复制 ✓';
-        setTimeout(()=>btn.textContent = txt, 1600);
-      }catch{
-        alert('复制失败，请手动全选复制');
-      }
-    });
-
-    // open Reaction Timer
-    document.querySelector('[data-open="rt"]').addEventListener('click',()=>{
-      $('#rtModal').classList.add('open');
-    });
-
-    // Reaction Timer core
-    const rt = {
-      state: 'idle', // idle|waiting|ready|done
-      t0: 0,
-      to: null,
-    };
-    const stage = $('#rtStage');
-    const hint = $('#rtHint');
-    const res = $('#rtResult');
-    const startBtn = $('#rtStart');
-    const retryBtn = $('#rtRetry');
-
-    function resetRT(){
-      rt.state='idle';
-      stage.style.background = '#0b132b';
-      hint.className='rt-hint';
-      hint.textContent = '点击下方按钮开始，等待屏幕提示“点我！”再尽快点击。';
-      res.textContent='—';
-      retryBtn.disabled=true;
-    }
-    resetRT();
-
-    startBtn.onclick = ()=>{
-      if(rt.state!=='idle'&&rt.state!=='done') return;
-      rt.state='waiting';
-      res.textContent='—';
-      stage.style.background = '#0b132b';
-      hint.className='rt-hint';
-      hint.textContent='请等待… (如果此时点击，将判定为过早)';
-      const delay = 800 + Math.random()*1800; // 0.8s - 2.6s
-      clearTimeout(rt.to);
-      rt.to = setTimeout(()=>{
-        rt.state='ready';
-        rt.t0 = performance.now();
-        stage.style.background = '#10381f';
-        hint.className='rt-big';
-        hint.textContent='点我！';
-      }, delay);
-    };
-
-    stage.onclick = ()=>{
-      if(rt.state==='waiting'){
-        clearTimeout(rt.to);
-        stage.style.background = '#3e1420';
-        hint.className='rt-hint';
-        hint.textContent='过早了！等变成“点我！”再点，点“再来一次”。';
-        res.textContent='判定：过早';
-        rt.state='done';
-        inc('rt');
-        retryBtn.disabled=false;
-      } else if(rt.state==='ready'){
-        const dt = Math.round(performance.now()-rt.t0);
-        stage.style.background = '#0b132b';
-        hint.className='rt-hint';
-        hint.textContent='点击下方按钮开始，等待提示后再点。';
-        res.textContent = `你的反应时间：${dt} ms`;
-        rt.state='done';
-        retryBtn.disabled=false;
-      }
-    };
-    retryBtn.onclick = ()=>{ resetRT(); };
-
-    // close Reaction Timer modal
-    $('#rtClose').onclick = ()=>{ $('#rtModal').classList.remove('open'); resetRT(); };
-    $('#rtModal').addEventListener('click',(e)=>{ if(e.target.id==='rtModal'){ $('#rtModal').classList.remove('open'); resetRT(); }});
-
-    // --- Click Challenge ---
-    document.querySelector('[data-open="clicker"]').addEventListener('click',()=>{
-      $('#clickerModal').classList.add('open');
-    });
-
-    const ck = {
-      state: 'idle', // idle|running|done
-      score: 0,
-      tEnd: 0,
-      timer: null
-    };
-    const ckStage = $('#clickerStage');
-    const ckHint = $('#clickerHint');
-    const ckRes = $('#clickerResult');
-    const ckStart = $('#clickerStart');
-    const ckRetry = $('#clickerRetry');
-    const ckBig = $('#clickerBig');
-    const ckTime = $('#clickerTime');
-    const ckScore = $('#clickerScore');
-
-    function resetCK(){
-      ck.state='idle'; ck.score=0; ck.tEnd=0; clearInterval(ck.timer);
-      ckStage.style.background='#0b132b';
-      ckHint.textContent='点击“开始”后，5 秒内尽可能多地点下方大按钮。';
-      ckRes.textContent='—';
-      ckTime.textContent='5.0';
-      ckScore.textContent='0';
-      ckRetry.disabled=true;
-      ckBig.disabled=true;
-    }
-    resetCK();
-
-    ckStart.onclick = ()=>{
-      if(ck.state==='running') return;
-      ck.state='running'; ck.score=0; ckScore.textContent='0';
-      ckBig.disabled=false; ckRetry.disabled=true; ckRes.textContent='—';
-      ckStage.style.background='#0b132b';
-      const DUR = 5000; // 5s
-      ck.tEnd = performance.now() + DUR;
-      const tick = ()=>{
-        const left = Math.max(0, ck.tEnd - performance.now());
-        ckTime.textContent = (left/1000).toFixed(1);
-        if(left<=0){
-          clearInterval(ck.timer);
-          ck.state='done'; ckBig.disabled=true; ckRetry.disabled=false;
-          inc('ck');
-          ckRes.textContent=`你的成绩：${ck.score} 次`;
-        }
-      };
-      clearInterval(ck.timer); ck.timer = setInterval(tick, 100);
-      tick();
-    };
-
-    ckBig.onclick = ()=>{
-      if(ck.state!=='running') return;
-      ck.score++; ckScore.textContent = String(ck.score);
-      ckStage.style.background = '#0f253f';
-      setTimeout(()=>{ ckStage.style.background='#0b132b'; }, 60);
-    };
-
-    ckRetry.onclick = ()=>{ resetCK(); };
-
-    // close Clicker modal
-    $('#clickerClose').onclick = ()=>{ $('#clickerModal').classList.remove('open'); resetCK(); };
-    $('#clickerModal').addEventListener('click',(e)=>{ if(e.target.id==='clickerModal'){ $('#clickerModal').classList.remove('open'); resetCK(); }});
-  </script>
 </body>
 </html>
